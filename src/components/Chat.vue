@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { ref, computed, unref, onMounted, watch } from 'vue';
+    import { ref, computed, unref, onMounted, watch, nextTick } from 'vue';
     import debounce from 'debounce';
     import BaseInput from './BaseInput.vue';
     import { Message, Quiestion, MessageStatus } from '../types';
@@ -13,6 +13,7 @@
     const messages = ref<Message[]>([]);
     const dialogStatus = ref<'reading' | 'writing' | ''>('');
     const messageIdsStatus = ref<Record<string, MessageStatus>>({'': 'sent'}); 
+    const chatBlockRef = ref<HTMLElement>() 
 
     const buttonDisabled = computed(() => !unref(messageModel));
 
@@ -42,6 +43,11 @@
         }
     };
 
+    const srollToDown = async () => {
+        await nextTick();
+        chatBlockRef.value?.scrollTo(0, chatBlockRef.value.scrollHeight);
+    };
+
 
     const changeMessage = (message: Message) => {
         const texts = message.content.map((content) => content.text.value);
@@ -57,6 +63,7 @@
             let clientMessage = createUserMessage(unref(messageModel));
             messages.value.push(clientMessage);
             messageModel.value = '';
+            srollToDown();
             clientMessage = await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeMessage(clientMessage);
@@ -69,6 +76,7 @@
             await delayWriting(assistantMessage);
             messages.value.push(assistantMessage);
             messageIdsStatus.value[assistantMessage.id] = 'read';
+            srollToDown();
         } catch (error) {
             
         } finally {
@@ -93,7 +101,10 @@
 <template>
     <div class="chat">
         <ChatHeader></ChatHeader>
-        <div class="chat__messages-container">
+        <div 
+            ref="chatBlockRef"
+            class="chat__messages-container"
+        >
             <div 
                 class="chat__messages"
                 v-for="message in messages"
