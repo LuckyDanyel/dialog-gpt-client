@@ -70,6 +70,7 @@
             await delayBeforeReading();
             messageIdsStatus.value[clientMessage.id] = 'read';
             dialogStatus.value = 'reading';
+            srollToDown();
             await delayReading(clientMessage);
             dialogStatus.value = 'writing';
             const assistantMessage = await getAnswer();
