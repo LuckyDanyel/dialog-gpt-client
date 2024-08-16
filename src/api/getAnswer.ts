@@ -1,20 +1,20 @@
 import { CHAT_GPT_DOMAIN } from "./constants";
-import { Quiestion, Message } from "../types";
+import { Message } from "../types";
 
-const data: Message = {
-    'id': '123213',
-    "created_at": 1723388331,
-    "role": "assistant",
-    "content": [
-        {
-            "type": "text",
-            "text": {
-                "value": "Я могу помочь вам с различными вопросами, связанными с стоматологической клиникой",
-                "annotations": []
-            }
-        }
-    ],
-}
+// const data: Message = {
+//     'id': '123213',
+//     "created_at": 1723388331,
+//     "role": "assistant",
+//     "content": [
+//         {
+//             "type": "text",
+//             "text": {
+//                 "value": "Я могу помочь вам с различными вопросами, связанными с стоматологической клиникой",
+//                 "annotations": []
+//             }
+//         }
+//     ],
+// }
 
 export default async function(): Promise<Message> {
     try {

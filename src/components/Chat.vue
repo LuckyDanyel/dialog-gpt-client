@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-    import { ref, computed, unref, onMounted, watch, nextTick } from 'vue';
-    import debounce from 'debounce';
+    import { ref, computed, unref, onMounted, nextTick } from 'vue';
     import BaseInput from './BaseInput.vue';
-    import { Message, Quiestion, MessageStatus } from '../types';
+    import { Message, MessageStatus } from '../types';
     import { getAnswer, getMessages, sendMessages } from '../api';
     import MessageBlock from './MessageBlock.vue';
     import { delayWriting, delayReading, delayBeforeReading } from '../utils';

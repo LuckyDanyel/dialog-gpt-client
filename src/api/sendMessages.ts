@@ -1,26 +1,26 @@
 import { CHAT_GPT_DOMAIN } from "./constants";
 import { Message, Quiestion } from "../types";
 
-const message = {
-    "id": "msg_szAmsN1gW6nCv7fpMfQsC3nb",
-    "object": "thread.message",
-    "created_at": 1723815391,
-    "assistant_id": null,
-    "thread_id": "thread_S8xyYJDczGoRHk4cQJq5i9gE",
-    "run_id": null,
-    "role": "user",
-    "content": [
-        {
-            "type": "text",
-            "text": {
-                "value": "Привет\n",
-                "annotations": []
-            }
-        }
-    ],
-    "attachments": [],
-    "metadata": {}
-}
+// const message = {
+//     "id": "msg_szAmsN1gW6nCv7fpMfQsC3nb",
+//     "object": "thread.message",
+//     "created_at": 1723815391,
+//     "assistant_id": null,
+//     "thread_id": "thread_S8xyYJDczGoRHk4cQJq5i9gE",
+//     "run_id": null,
+//     "role": "user",
+//     "content": [
+//         {
+//             "type": "text",
+//             "text": {
+//                 "value": "Привет\n",
+//                 "annotations": []
+//             }
+//         }
+//     ],
+//     "attachments": [],
+//     "metadata": {}
+// }
 
 export default async function(quiestions: Quiestion[]): Promise<Message> {
     try {

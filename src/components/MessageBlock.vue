@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { ref, computed, unref } from 'vue';
+    import { computed } from 'vue';
     import { Message, MessageStatus } from '../types';
 
 
@@ -10,9 +10,6 @@
 
     const changeStarsToBold = (text: string): string => {
         return text.replace(/\*\*(.*?)\*\*/g, "$1");
-    };
-    const deleteAnotations = () => {
-
     };
 
     const modifyText = (text: string): string => {
