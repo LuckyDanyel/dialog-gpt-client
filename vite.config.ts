@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from "url";
+import path from 'path';
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -7,7 +7,9 @@ export default defineConfig({
   base: 'http://localhost:5173/dialog',
   plugins: [vue()],
   resolve: {
-    alias: [ { find: '@src', replacement: fileURLToPath(new URL('./src', import.meta.url)) } ]
+    alias: {
+      '@src': path.resolve(__dirname, './src'),
+    }
   },  
   css: {
     preprocessorOptions: {
