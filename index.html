@@ -10,12 +10,12 @@
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
 
-    <script src="http://gpt.luckydanyel.ru/dialog/script">
+    <script>
       const script = document.createElement('script');
-      fetch('http://gpt.luckydanyel.ru/dialog/script').then((url) => {
-        script.setAttribute('src', url);
-        document.querySelector('header').appendChild(script);
-      });
+      const day = new Date().getDate();
+      const url = `http://gpt.luckydanyel.ru/assets/js/main.js?${day}`;
+      script.setAttribute('src', url);
+      document.querySelector('header').appendChild(script);
     </script>
   </body>
 </html>
