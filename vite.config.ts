@@ -3,7 +3,10 @@ import { defineConfig } from 'vite'
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 import vue from '@vitejs/plugin-vue'
 import { createHash } from 'crypto';
-
+console.log(process.env)
+const isProd = process.env.NODE_ENV;
+const isDev = !isProd;
+const domain = process.env.VITE_CHAT_GPT_DOMAIN_CLIENT;
 // https://vitejs.dev/config/
 export default defineConfig(({}) => {
 
@@ -20,7 +23,7 @@ export default defineConfig(({}) => {
       'import.meta.env.BUILD_ID': JSON.stringify(buildId),
       'import.meta.env.STYLE_ID': JSON.stringify(styleId),
     },
-    base: 'http://localhost:5174/dialog',
+    base: `${domain}/dialog`,
     plugins: [
       vue(),
       cssInjectedByJsPlugin({ styleId: buildId }),
