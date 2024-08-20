@@ -22,7 +22,7 @@ import { Message, Quiestion } from "../types";
 //     "metadata": {}
 // }
 
-export default async function(quiestions: Quiestion[]): Promise<Message> {
+export default async function(quiestions: Quiestion[]): Promise<{ dialogId: string, message: Message }> {
     try {
 
         // return new Promise((res, rej) => {
@@ -40,7 +40,6 @@ export default async function(quiestions: Quiestion[]): Promise<Message> {
             },
             body: JSON.stringify(quiestions),
         });
-        console.log(data.headers.getSetCookie());
         return data.json();
 
     } catch (error) {

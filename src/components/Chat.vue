@@ -57,13 +57,19 @@
         });
     };
 
+    const setCookie = (dialogId: string) => {
+        document.cookie = `dialogId=${dialogId}; path=/; domain=luckydanyel.ru; secure`;
+    };
+
     const onSendMessage = async () => {
         try {
             let clientMessage = createUserMessage(unref(messageModel));
             messages.value.push(clientMessage);
             messageModel.value = '';
             srollToDown();
-            clientMessage = await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
+            const { dialogId, message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
+            setCookie(dialogId);
+            clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeMessage(clientMessage);
             await delayBeforeReading();
