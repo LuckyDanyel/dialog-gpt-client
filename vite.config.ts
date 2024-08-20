@@ -23,7 +23,7 @@ export default defineConfig(({}) => {
       'import.meta.env.BUILD_ID': JSON.stringify(buildId),
       'import.meta.env.STYLE_ID': JSON.stringify(styleId),
     },
-    base: `${domain}/dialog`,
+    base: `http://localhost:5174/dialog`,
     plugins: [
       vue(),
       cssInjectedByJsPlugin({ styleId: buildId }),
