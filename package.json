@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite serve --port 3005 NODE_ENV='production'",
+    "build": "vite build && vite serve --port 3005 --strictPort true NODE_ENV='production'",
     "preview": "vite preview"
   },
   "dependencies": {
