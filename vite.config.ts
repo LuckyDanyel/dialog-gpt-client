@@ -18,6 +18,9 @@ export default defineConfig(({}) => {
   const styleId = `styles-${buildId}`;
 
   return {
+    server: {
+      strictPort: true,
+    },
     define: {
       'import.meta.env.BUILD_ID': JSON.stringify(buildId),
       'import.meta.env.STYLE_ID': JSON.stringify(styleId),
