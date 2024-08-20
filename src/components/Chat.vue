@@ -58,7 +58,7 @@
     };
 
     const setCookie = (dialogId: string) => {
-        document.cookie = `dialogId=${dialogId}; path=/; domain=luckydanyel.ru; secure`;
+        document.cookie = `dialogId=${dialogId}; path=/;`;
     };
 
     const onSendMessage = async () => {
