@@ -8,7 +8,7 @@ export default async function(): Promise<Message[]> {
             headers: {
                 'Content-type': 'aplication/json',
             },
-            credentials: 'include'
+            credentials: 'same-origin'
         });
         return data.json();
         // return [];
