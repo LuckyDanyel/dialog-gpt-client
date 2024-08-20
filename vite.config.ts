@@ -1,13 +1,10 @@
 import path from 'path';
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 import vue from '@vitejs/plugin-vue'
 import { createHash } from 'crypto';
-const isProd = process.env.NODE_ENV;
-const isDev = !isProd;
-const domain = process.env.VITE_CHAT_GPT_DOMAIN_CLIENT;
 // https://vitejs.dev/config/
-export default defineConfig(({}) => {
+export default defineConfig(({ mode }) => {
 
   const hash = createHash('sha256')
     .update(Date.now().toString())
@@ -17,19 +14,22 @@ export default defineConfig(({}) => {
   const buildId = `dialog-widget-${hash}`;
   const styleId = `styles-${buildId}`;
 
+  const env = loadEnv('./env', process.cwd(), '');
+  const domain = env.VITE_CHAT_GPT_DOMAIN_CLIENT;
+
   return {
-    server: {
-      strictPort: true,
-    },
     define: {
       'import.meta.env.BUILD_ID': JSON.stringify(buildId),
       'import.meta.env.STYLE_ID': JSON.stringify(styleId),
+    },
+    server: {
     },
     base: `${domain}/dialog`,
     plugins: [
       vue(),
       cssInjectedByJsPlugin({ styleId: buildId }),
     ],
+    publicDir: 'dist',
     build: {
       rollupOptions: {
         output: {

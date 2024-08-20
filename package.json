@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && vite serve --port 3005 --strictPort true NODE_ENV='production'",
+    "dev": "vite --port 3005 --strictPort true",
+    "build": "vite build && vite serve --port 3005 --strictPort true",
     "preview": "vite preview"
   },
   "dependencies": {
