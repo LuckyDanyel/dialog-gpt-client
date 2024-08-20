@@ -38,6 +38,7 @@ export default async function(quiestions: Quiestion[]): Promise<{ dialogId: stri
             headers: {
                 'Content-type': 'application/json; charset=utf-8',
             },
+            credentials: 'include',
             body: JSON.stringify(quiestions),
         });
         return data.json();
