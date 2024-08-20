@@ -40,6 +40,7 @@ export default async function(quiestions: Quiestion[]): Promise<Message> {
             },
             body: JSON.stringify(quiestions),
         });
+        console.log(data.headers.getSetCookie());
         return data.json();
 
     } catch (error) {

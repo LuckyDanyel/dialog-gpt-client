@@ -10,7 +10,6 @@ export default async function(): Promise<Message[]> {
             },
             credentials: 'include',
         });
-        console.log(data.headers.getSetCookie());
         return data.json();
         // return [];
 
