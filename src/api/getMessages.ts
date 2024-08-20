@@ -8,8 +8,9 @@ export default async function(): Promise<Message[]> {
             headers: {
                 'Content-type': 'aplication/json',
             },
-            credentials: 'same-origin'
+            credentials: 'include',
         });
+        console.log(data.headers.getSetCookie());
         return data.json();
         // return [];
 
