@@ -29,6 +29,7 @@ export default async function(): Promise<Message> {
             headers: {
                 'Content-type': 'application/json',
             },
+            credentials: 'include',
         });
         const message = await data.json() as Message;
         return message;
