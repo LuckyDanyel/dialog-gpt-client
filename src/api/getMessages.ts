@@ -7,7 +7,8 @@ export default async function(): Promise<Message[]> {
         const data = await fetch(url, {
             headers: {
                 'Content-type': 'aplication/json',
-            }
+            },
+            credentials: 'include'
         });
         return data.json();
         // return [];
