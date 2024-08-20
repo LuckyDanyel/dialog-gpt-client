@@ -57,10 +57,6 @@
         });
     };
 
-    const setCookie = (dialogId: string) => {
-        document.cookie = `dialogId=${dialogId}; path=/;`;
-    };
-
     const onSendMessage = async () => {
         try {
             let clientMessage = createUserMessage(unref(messageModel));
@@ -68,7 +64,6 @@
             messageModel.value = '';
             srollToDown();
             const { dialogId, message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
-            setCookie(dialogId);
             clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeMessage(clientMessage);
