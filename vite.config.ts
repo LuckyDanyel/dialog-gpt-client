@@ -22,8 +22,6 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.BUILD_ID': JSON.stringify(buildId),
       'import.meta.env.STYLE_ID': JSON.stringify(styleId),
     },
-    server: {
-    },
     base: `${domain}/dialog`,
     plugins: [
       vue(),

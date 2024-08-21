@@ -92,6 +92,7 @@
             dialogMessages.forEach((message) => {
                 unref(messageIdsStatus)[message.id] = 'read';
             });
+            srollToDown();
         } catch (error) {
             
         }
