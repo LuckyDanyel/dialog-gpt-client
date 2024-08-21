@@ -63,7 +63,7 @@
             messages.value.push(clientMessage);
             messageModel.value = '';
             srollToDown();
-            const { dialogId, message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
+            const { message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
             clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeMessage(clientMessage);
