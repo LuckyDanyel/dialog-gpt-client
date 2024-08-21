@@ -52,7 +52,9 @@
         const texts = message.content.map((content) => content.text.value);
 
         texts.forEach((text) => {
-            const clientMessageIndex = unref(messages).findIndex((message) => message.content.find((content) => content.text.value === text));
+            const clientMessageIndex = unref(messages)
+                .filter((clientMessage) => !clientMessage.id)
+                .findIndex((message) => message.content.find((content) => content.text.value === text));
             unref(messages)[clientMessageIndex] = message;
         });
     };
