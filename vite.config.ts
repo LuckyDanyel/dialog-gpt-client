@@ -31,11 +31,19 @@ export default defineConfig(({ mode }) => {
     publicDir: 'dist',
     build: {
       rollupOptions: {
-        output: {
-          entryFileNames: `assets/js/main.js`,
-          chunkFileNames: `assets/[ext]/[name]-[hash].js`,
-          assetFileNames: `assets/[ext]/[name]-[hash].[ext]`,
+        input: {
+          chat: './src/main.ts',
+          request: './src/request.ts',
+          requestHtml: './src/request.html'    
         },
+        output: [
+          {
+            dir: 'dist',
+            entryFileNames: '[name].js',
+            chunkFileNames: '[name].js',
+            assetFileNames: 'assets/[name]-[hash].[ext]',
+          },
+        ],
       },
     },
     resolve: {
