@@ -28,6 +28,7 @@ export default async function(): Promise<Message> {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
+                'Accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
             },
             credentials: 'include',
         });

@@ -37,6 +37,7 @@ export default async function(quiestions: Quiestion[]): Promise<{ dialogId: stri
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=utf-8',
+                'Accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
             },
             credentials: 'include',
             body: JSON.stringify(quiestions),
