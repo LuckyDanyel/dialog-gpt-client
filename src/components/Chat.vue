@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { ref, computed, unref, onMounted, nextTick } from 'vue';
+    import { ref, computed, unref, onMounted, nextTick, onUpdated } from 'vue';
     import BaseInput from './BaseInput.vue';
     import { Message, MessageStatus } from '../types';
     import { getAnswer, getMessages, sendMessages } from '../api';
@@ -8,15 +8,17 @@
     import MessageLoader from './MessageLoader.vue';
     import ChatHeader from './ChatHeader.vue';
 
+    const emit = defineEmits<{
+        (e: 'close'): void,
+    }>()
+
     const messageModel = ref('');
     const messages = ref<Message[]>([]);
     const dialogStatus = ref<'reading' | 'writing' | ''>('');
     const messageIdsStatus = ref<Record<string, MessageStatus>>({'': 'sent'}); 
-    const chatBlockRef = ref<HTMLElement>() 
+    const chatBlockRef = ref<HTMLElement>();
 
     const buttonDisabled = computed(() => !unref(messageModel));
-
-    const counter = ref(0);
 
     const dialogStatusText = computed(() => {
         if(unref(dialogStatus) === 'reading') return 'Оператор читает сообщения';
@@ -43,49 +45,43 @@
     };
 
     const srollToDown = async () => {
-        await nextTick();
         chatBlockRef.value?.scrollTo(0, chatBlockRef.value.scrollHeight);
     };
 
 
-    const changeMessage = (message: Message) => {
-        const texts = message.content.map((content) => content.text.value);
-
-        texts.forEach((text) => {
-            const clientMessageIndex = unref(messages)
-                .filter((clientMessage) => !clientMessage.id)
-                .findIndex((message) => message.content.find((content) => content.text.value === text));
-            unref(messages)[clientMessageIndex] = message;
-        });
+    const changeClientMessage = (message: Message, index: number) => {
+        unref(messages)[index] = message;
     };
 
     const onSendMessage = async () => {
         try {
             let clientMessage = createUserMessage(unref(messageModel));
             messages.value.push(clientMessage);
+            const messageIndex = messages.value.length - 1;
             messageModel.value = '';
-            srollToDown();
             const { message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
             clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
-            changeMessage(clientMessage);
+            changeClientMessage(clientMessage, messageIndex);
             await delayBeforeReading();
             messageIdsStatus.value[clientMessage.id] = 'read';
             dialogStatus.value = 'reading';
-            srollToDown();
             await delayReading(clientMessage);
             dialogStatus.value = 'writing';
             const assistantMessage = await getAnswer();
             await delayWriting(assistantMessage);
             messages.value.push(assistantMessage);
             messageIdsStatus.value[assistantMessage.id] = 'read';
-            srollToDown();
         } catch (error) {
-            
+            console.log(error);
         } finally {
             dialogStatus.value = '';
         }
     };
+
+    onUpdated(() => {
+        srollToDown();
+    });
 
     onMounted(async () => {
         try {
@@ -94,7 +90,6 @@
             dialogMessages.forEach((message) => {
                 unref(messageIdsStatus)[message.id] = 'read';
             });
-            srollToDown();
         } catch (error) {
             
         }
@@ -104,25 +99,38 @@
 
 <template>
     <div class="chat">
-        <ChatHeader></ChatHeader>
         <div 
-            ref="chatBlockRef"
-            class="chat__messages-container"
+            class="chat__header_height"
         >
+            <ChatHeader
+                ref="headerRef"
+                class="chat__header"
+                :with-close-icon="true"
+                @close="emit('close')"
+            ></ChatHeader>
+        </div>
+        <div
+            ref="chatBlockRef"
+            class="chat__messages-wrapper"
+        >
+            <div></div>
             <div 
-                class="chat__messages"
-                v-for="message in messages"
+                class="chat__messages-container"
             >
-                <MessageBlock
-                    :message="message"
-                    :counter="counter"
-                    :message-status="messageIdsStatus[message.id]"
-                />
+                <div 
+                    class="chat__messages"
+                    v-for="message in messages"
+                >
+                    <MessageBlock
+                        :message="message"
+                        :message-status="messageIdsStatus[message.id]"
+                    />
+                </div>
+                <MessageLoader
+                    v-if="dialogStatusText"
+                    :text="dialogStatusText"
+                ></MessageLoader>
             </div>
-            <MessageLoader
-                v-if="dialogStatusText"
-                :text="dialogStatusText"
-            ></MessageLoader>
         </div>
         <div class="chat__enter-message">
             <BaseInput
@@ -140,13 +148,33 @@
 <style lang="scss" scoped>
     .chat {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        border-top-right-radius: 12px;
-        border-top-left-radius: 12px;
-        overflow: hidden;
         width: 100%;
         padding-bottom: 12px;
         &__enter-message {
             margin-top: 4px;
+        }
+
+        &__messages-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 360px;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+
+            // &::-webkit-scrollbar {
+            //     width: 8px;
+            // }
+
+            // &::-webkit-scrollbar-thumb {
+            //     border-radius: 10px;
+            //     background-color: #b7bfca;
+            // }
+
+            // &::-webkit-scrollbar-track {
+            //     border-radius: 10px;
+            //     background-color: #dee4ec;
+            // }
         }
 
         &__messages-container {
@@ -154,31 +182,36 @@
             padding-bottom: 12px;
             padding-left: 12px;
             padding-right: 6px;
-            height: 360px;
-            overflow-y: auto;
             display: flex;
             flex-direction: column;
             grid-gap: 20px;
-            &::-webkit-scrollbar {
-                width: 8px;
-            }
 
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background-color: #b7bfca;
-            }
-
-            &::-webkit-scrollbar-track {
-                border-radius: 10px;
-                background-color: #dee4ec;
-            }
-
+        }
+        &__header_height {
+            min-height: $HEADER_HEIGHT;
         }
 
         &__messages {
             display: flex;
             flex-direction: column;
             gap: 16px;
+        }
+
+        
+        @media (max-width: $MOBILE_SIZE) {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-height: 100vh;
+            height: 100%;
+
+            &__messages-wrapper {
+                flex-grow: 1;
+                height: auto;
+            }
+            &__header {
+                padding-left: 50px;
+            }
         }
 
     }

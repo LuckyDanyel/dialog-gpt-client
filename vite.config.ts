@@ -3,7 +3,8 @@ import { defineConfig, loadEnv } from 'vite'
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 import vue from '@vitejs/plugin-vue'
 import { createHash } from 'crypto';
-// https://vitejs.dev/config/
+import autoprefixer from 'autoprefixer'
+
 export default defineConfig(({ mode }) => {
 
   const hash = createHash('sha256')
@@ -43,6 +44,10 @@ export default defineConfig(({ mode }) => {
       }
     },  
     css: {
+
+      postcss: {
+        plugins: [autoprefixer({ })],
+      },
       preprocessorOptions: {
         scss: {
           additionalData: `@import "@src/assets/variables.scss";`

@@ -1,9 +1,15 @@
 <script lang="ts" setup>
 
+    const emit = defineEmits<{
+        (e: 'close'): void,
+    }>()
+
     withDefaults(defineProps<{
-        small?: boolean
+        small?: boolean,
+        withCloseIcon?: boolean,
     }>(), {
         small: false,
+        withClose: false,
     });
     
 
@@ -16,7 +22,13 @@
             'header_small': small,
         }"
     >
-        <div class="header__title"> Напишите ваше сообщене </div>
+
+        <div 
+            v-if="withCloseIcon"
+            @click="emit('close')"
+            class="header__close"
+        ></div>
+        <div class="header__title"> Напишите ваше сообщение </div>
         <div class="header__subtitle" v-if="!small"> Операторы онлайн </div>
     </div>
 </template>
@@ -24,7 +36,8 @@
 
 <style lang="scss" scoped>
     .header {
-        min-height: 60px;
+        min-height: $HEADER_HEIGHT;
+        position: relative;
         display: flex;
         align-items: flex-start;
         justify-content: center;
@@ -37,6 +50,39 @@
         border-top-right-radius: 12px;
         border-top-left-radius: 12px;
         width: 100%;
+
+        &__close {
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 100%;
+            background-color: white;
+            border: 1px solid black;
+            left: -36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &::before,
+            &::after {
+                position: absolute;
+                content: '';
+                display: block;
+                width: 1px;
+                height: 12px;
+                background-color: black;
+                
+            }
+
+            &::after {
+                transform: rotate(-45deg);
+            }
+            &::before {
+                transform: rotate(45deg);
+            }
+        }
 
         &__title, &__subtitle {
             color: white;
@@ -54,6 +100,28 @@
 
         &_small {
             min-height: 40px;
+        }
+
+        @media (max-width: $MOBILE_SIZE) {
+            border-top-right-radius: 0px;
+            border-top-left-radius: 0px;
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            &__close {
+                left: 10px;
+                background-color: transparent;
+                border: 1px solid transparent;
+                box-shadow: none;
+
+                &::before,
+                &::after {
+                    background-color: white;
+                    height: 16px;
+                
+                }
+            }
         }
     }
 

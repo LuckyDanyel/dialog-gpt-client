@@ -3,83 +3,76 @@
     import Chat from './components/Chat.vue';
     import ChatHeader from './components/ChatHeader.vue';
     const isOpen = ref(false);
+    const chatRef = ref<HTMLElement>();
 
 </script>
 
 
 <template>
     <div class="app">
-        <div 
-            class="app__chat app_position"
-            v-if="isOpen"
-        >
             <div 
-                class="app__chat-close"
-                @click="isOpen = false"
-            ></div>
-            <Chat></Chat>
-        </div>
+                class="app__chat"
+                v-show="isOpen"
+            >
+            <Chat
+                ref="chatRef"
+                @close="isOpen = false"
+            ></Chat>
+            </div>
         <div 
-            v-if="!isOpen"
+            v-show="!isOpen"
             @click="isOpen = true"
-            class="app__chat-header app_position"
+            class="app__chat-trigger"
         >
-            <ChatHeader :small="true"></ChatHeader>
+            <ChatHeader 
+                class="app__chat-header"
+                :small="true"
+            ></ChatHeader>
         </div>
 
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
     .app {
-        padding-top: 100px;
-        &_position {
+        &__chat {
+            max-width: 340px;
+            width: 100%;
+
             position: fixed;
             bottom: 0;
             right: 50px;
         }
-        &__chat {
-            max-width: 340px;
-            width: 100%;
-        }
-        &__chat-header {
+        &__chat-trigger {
             cursor: pointer;
             max-width: 250px;
             width: 100%;
+
+            position: fixed;
+            bottom: 0;
+            right: 50px;
         }
-        &__chat-close {
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background-color: black;
-            border-radius: 100%;
-            background-color: white;
-            border: 1px solid black;
-            left: -36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
 
-            &::before,
-            &::after {
-                position: absolute;
-                content: '';
-                display: block;
-                width: 1px;
-                height: 12px;
-                background-color: black;
-                
-            }
 
-            &::after {
-                transform: rotate(-45deg);
+        @media (max-width: $MOBILE_SIZE) {
+            &__chat-header {
+                display: none;
             }
-            &::before {
-                transform: rotate(45deg);
+            &__chat-trigger {
+                width: 52px;
+                height: 52px;
+                background-image: url('./icons/chat-icon.svg');
+                background-repeat: no-repeat;
+                right: 10px;
+            }
+            &__chat {
+                right: 0px;
+                max-width: 100%;
+                max-height: 100vh;
+                height: 100%;
             }
         }
+
     }
 
 </style>

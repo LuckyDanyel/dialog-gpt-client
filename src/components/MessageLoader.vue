@@ -15,7 +15,6 @@
 
 <style lang="scss">
     .message-loader {
-        height: 100%;
         display: flex;
         align-items: flex-end;
         animation-name: MessageLoader;

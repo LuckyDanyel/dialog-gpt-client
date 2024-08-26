@@ -5,17 +5,10 @@
     <link rel="icon" type="image/svg+xml"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gpt-dialog-assistant</title>
+    <script type="module" crossorigin src="./src/main.ts"></script>
+    
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-
-    <script>
-      const script = document.createElement('script');
-      const day = new Date().getDate();
-      const url = `http://gpt.luckydanyel.ru/assets/js/main.js?${day}`;
-      script.setAttribute('src', url);
-      document.querySelector('header').appendChild(script);
-    </script>
   </body>
 </html>

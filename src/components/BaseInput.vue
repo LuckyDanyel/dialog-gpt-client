@@ -53,6 +53,9 @@
 
     $buttonSize: 26px;
     $textAriaPaddingTop: 16px;
+
+    
+
     .base-input {
         border-top: 1px solid #d8dee3;
         display: flex;
@@ -65,7 +68,7 @@
             padding-top: $textAriaPaddingTop;
             padding-left: 12px;
             max-height: 70px;
-            font-size: 14px;
+            font-size: 16px;
             width: 100%;
             outline: none;
             padding-right: $buttonSize + 24px;
