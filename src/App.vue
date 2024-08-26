@@ -2,8 +2,34 @@
     import { ref } from 'vue';
     import Chat from './components/Chat.vue';
     import ChatHeader from './components/ChatHeader.vue';
+    import { MOBILE_SIZE } from './assets/variables.ts';
     const isOpen = ref(false);
     const chatRef = ref<HTMLElement>();
+    const buildId = import.meta.env.BUILD_ID;
+
+    const bodyClass = `chat-${buildId}`;
+    const bodyStyles = `
+        .${bodyClass} {
+            @media (max-width: ${MOBILE_SIZE}) {
+                overflow: hidden;
+                max-height: 100vh;
+            }
+        }
+    `;
+
+    const style = document.createElement('style');
+    style.innerHTML = bodyStyles;
+    document.head.appendChild(style);
+
+    const openChat = () => {
+        isOpen.value = true;
+        document.body.classList.add(bodyClass);
+    };
+
+    const closeChat = () => {
+        isOpen.value = false;
+        document.body.classList.remove(bodyClass);
+    }
 
 </script>
 
@@ -14,14 +40,14 @@
                 class="app__chat"
                 v-show="isOpen"
             >
-            <Chat
-                ref="chatRef"
-                @close="isOpen = false"
-            ></Chat>
+                <Chat
+                    ref="chatRef"
+                    @close="closeChat()"
+                ></Chat>
             </div>
         <div 
             v-show="!isOpen"
-            @click="isOpen = true"
+            @click="openChat()"
             class="app__chat-trigger"
         >
             <ChatHeader 
@@ -35,6 +61,7 @@
 
 <style lang="scss" scoped>
     .app {
+        height: 5000px;
         &__chat {
             max-width: 340px;
             width: 100%;
@@ -59,14 +86,18 @@
                 display: none;
             }
             &__chat-trigger {
-                width: 52px;
-                height: 52px;
+                width: 65px;
+                height: 65px;
                 background-image: url('./icons/chat-icon.svg');
                 background-repeat: no-repeat;
                 right: 10px;
+                bottom: 10px;
             }
             &__chat {
-                right: 0px;
+                right: 0;
+                bottom: 0;
+                top: 0;
+                left: 0;
                 max-width: 100%;
                 max-height: 100vh;
                 height: 100%;

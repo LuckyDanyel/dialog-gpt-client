@@ -25,23 +25,23 @@ const message = {
 export default async function(quiestions: Quiestion[]): Promise<{ dialogId: string, message: Message }> {
     try {
 
-        return new Promise((res, rej) => {
-            setTimeout(() => {
-                res({ message });
-            }, 2000);
-        });
-
-
-        // const url = `${CHAT_GPT_DOMAIN}/api/dialog/messages`;
-        // const data = await fetch(url, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-type': 'application/json; charset=utf-8',
-        //     },
-        //     credentials: 'include',
-        //     body: JSON.stringify(quiestions),
+        // return new Promise((res, rej) => {
+        //     setTimeout(() => {
+        //         res({ message });
+        //     }, 2000);
         // });
-        // return data.json();
+
+
+        const url = `${CHAT_GPT_DOMAIN}/api/dialog/messages`;
+        const data = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=utf-8',
+            },
+            credentials: 'include',
+            body: JSON.stringify(quiestions),
+        });
+        return data.json();
 
     } catch (error) {
         throw error;

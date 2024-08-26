@@ -45,7 +45,11 @@
     };
 
     const srollToDown = async () => {
-        chatBlockRef.value?.scrollTo(0, chatBlockRef.value.scrollHeight);
+        const isScrollDown = Math.floor(chatBlockRef.value!.scrollTop + chatBlockRef.value!.clientHeight) === chatBlockRef.value?.scrollHeight;
+        if(isScrollDown) {
+            await nextTick();
+            chatBlockRef.value?.scrollTo(0, chatBlockRef.value.scrollHeight);
+        }
     };
 
 
@@ -59,29 +63,29 @@
             messages.value.push(clientMessage);
             const messageIndex = messages.value.length - 1;
             messageModel.value = '';
+            await srollToDown();
             const { message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
             clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeClientMessage(clientMessage, messageIndex);
+            await srollToDown();
             await delayBeforeReading();
             messageIdsStatus.value[clientMessage.id] = 'read';
             dialogStatus.value = 'reading';
+            await srollToDown();
             await delayReading(clientMessage);
             dialogStatus.value = 'writing';
             const assistantMessage = await getAnswer();
             await delayWriting(assistantMessage);
             messages.value.push(assistantMessage);
             messageIdsStatus.value[assistantMessage.id] = 'read';
+            await srollToDown();
         } catch (error) {
             console.log(error);
         } finally {
             dialogStatus.value = '';
         }
     };
-
-    onUpdated(() => {
-        srollToDown();
-    });
 
     onMounted(async () => {
         try {
@@ -159,29 +163,29 @@
             flex-direction: column;
             justify-content: space-between;
             height: 360px;
-            overflow-y: scroll;
+            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
 
-            // &::-webkit-scrollbar {
-            //     width: 8px;
-            // }
+            &::-webkit-scrollbar {
+                width: 8px;
+            }
 
-            // &::-webkit-scrollbar-thumb {
-            //     border-radius: 10px;
-            //     background-color: #b7bfca;
-            // }
+            &::-webkit-scrollbar-thumb {
+                border-radius: 10px;
+                background-color: #b7bfca;
+            }
 
-            // &::-webkit-scrollbar-track {
-            //     border-radius: 10px;
-            //     background-color: #dee4ec;
-            // }
+            &::-webkit-scrollbar-track {
+                border-radius: 10px;
+                background-color: #dee4ec;
+            }
         }
 
         &__messages-container {
             padding-top: 32px;
             padding-bottom: 12px;
             padding-left: 12px;
-            padding-right: 6px;
+            padding-right: 12px;
             display: flex;
             flex-direction: column;
             grid-gap: 20px;
