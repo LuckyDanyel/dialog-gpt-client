@@ -7,7 +7,7 @@
     const chatRef = ref<HTMLElement>();
     const buildId = import.meta.env.BUILD_ID;
 
-    const bodyClass = `chat-${buildId}`;
+    const bodyClass = `body-styles-${buildId}`;
     const bodyStyles = `
         .${bodyClass} {
             @media (max-width: ${MOBILE_SIZE}) {
@@ -65,6 +65,9 @@
         &__chat {
             max-width: 340px;
             width: 100%;
+            background-color: white;
+            border-top-right-radius: 14px;
+            border-top-left-radius: 14px;
 
             position: fixed;
             bottom: 0;
