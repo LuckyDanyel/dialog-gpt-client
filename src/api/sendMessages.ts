@@ -1,4 +1,5 @@
-import { CHAT_GPT_DOMAIN } from "./constants";
+import Cookies from "js-cookie";
+import { CHAT_GPT_DOMAIN, cookieDialogId } from "./constants";
 import { Message, Quiestion } from "../types";
 
 const message = {
@@ -22,6 +23,8 @@ const message = {
     "metadata": {}
 }
 
+const dayMilliseconds = 24 * 60 * 60 * 1000
+
 export default async function(quiestions: Quiestion[]): Promise<{ dialogId: string, message: Message }> {
     try {
 
@@ -32,17 +35,26 @@ export default async function(quiestions: Quiestion[]): Promise<{ dialogId: stri
         // });
 
 
-        const url = `${CHAT_GPT_DOMAIN}/api/dialog/messages`;
+        const url = `${CHAT_GPT_DOMAIN}/api/dialog/send-messages`;
         const data = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json; charset=utf-8',
-                'Accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
             },
             credentials: 'include',
-            body: JSON.stringify(quiestions),
+            body: JSON.stringify({
+                id: Cookies.get(`${cookieDialogId}`) || '',
+                messages: quiestions,
+            }),
         });
-        return data.json();
+        const message: { dialogId: string, message: Message } = await data.json();
+        const { dialogId } = message;
+        if(data.status >= 200 && data.status < 400) {
+            Cookies.set(cookieDialogId, dialogId, { expires: new Date(Date.now() + dayMilliseconds) });
+            return message;
+        }
+        
+        throw new Error();
 
     } catch (error) {
         throw error;

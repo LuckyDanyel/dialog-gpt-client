@@ -32,9 +32,7 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         input: {
-          chat: './src/main.ts',
-          request: './src/request.ts',
-          requestHtml: './src/request.html'    
+          main: './src/main.ts',
         },
         output: [
           {

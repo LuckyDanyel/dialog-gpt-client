@@ -1,4 +1,5 @@
-import { CHAT_GPT_DOMAIN } from "./constants";
+import Cookies from "js-cookie";
+import { CHAT_GPT_DOMAIN, cookieDialogId } from "./constants";
 import { Message } from "../types";
 
 const data: Message = {
@@ -28,8 +29,10 @@ export default async function(): Promise<Message> {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
             },
+            body: JSON.stringify({
+                id: Cookies.get(`${cookieDialogId}`) || '',
+            }),
             credentials: 'include',
         });
         const message = await data.json() as Message;
