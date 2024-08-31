@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { CHAT_GPT_DOMAIN, cookieDialogId } from "./constants";
+import { cookieDialogId } from "./constants";
 import { Message, Quiestion } from "../types";
 
 const message = {
@@ -30,12 +30,12 @@ export default async function(quiestions: Quiestion[]): Promise<{ dialogId: stri
 
         // return new Promise((res, rej) => {
         //     setTimeout(() => {
-        //         res({ message });
+        //         res({ dialogId: '', message });
         //     }, 2000);
         // });
 
 
-        const url = `${CHAT_GPT_DOMAIN}/api/dialog/send-messages`;
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/dialog/send-messages`;
         const data = await fetch(url, {
             method: 'POST',
             headers: {

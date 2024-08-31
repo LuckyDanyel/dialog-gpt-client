@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { CHAT_GPT_DOMAIN, cookieDialogId } from "./constants";
+import { cookieDialogId } from "./constants";
 import { Message } from "../types";
 
 const data: Message = {
@@ -17,14 +17,14 @@ const data: Message = {
     ],
 }
 
-export default async function(): Promise<Message> {
+export default async function(): Promise<Message[]> {
     try {
         // return new Promise((res) => {
         //     setTimeout(() => {
-        //         res(data);
+        //         res([data]);
         //     }, 7000);
         // });
-        const url = `${CHAT_GPT_DOMAIN}/api/assistant/answer`;
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/assistant/answer`;
         const data = await fetch(url, {
             method: 'POST',
             headers: {
@@ -35,7 +35,7 @@ export default async function(): Promise<Message> {
             }),
             credentials: 'include',
         });
-        const message = await data.json() as Message;
+        const message = await data.json() as Message[];
         return message;
     } catch (error) {
         throw error;

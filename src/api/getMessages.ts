@@ -1,12 +1,12 @@
 
 import Cookies from "js-cookie";
-import { CHAT_GPT_DOMAIN, cookieDialogId } from "./constants";
+import { cookieDialogId } from "./constants";
 import { Message } from "../types";
 
 
 export default async function(): Promise<Message[]> {
     try {
-        const url = `${CHAT_GPT_DOMAIN}/api/dialog/messages`;
+        const url = `${import.meta.env.VITE_SERVER_URL}/api/dialog/messages`;
         const body = {
             id: Cookies.get(`${cookieDialogId}`) || '',
             messages: []

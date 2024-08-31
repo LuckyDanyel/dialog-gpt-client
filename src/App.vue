@@ -53,6 +53,7 @@
             <ChatHeader 
                 class="app__chat-header"
                 :small="true"
+                :headerText="'Администраторы онлайн'"
             ></ChatHeader>
         </div>
 

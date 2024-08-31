@@ -10,6 +10,7 @@
         placeholder: string;
         modelValue: string;
         buttonDisabled: boolean;
+        inputDisabled: boolean;
     }>();
 
     const inputModel = computed({
@@ -31,6 +32,7 @@
     <div class="base-input">
         <textarea
             :placeholder="placeholder"
+            :disabled="inputDisabled"
             @keyup.enter="handleButtonClick"
             v-model="inputModel"
             class="base-input__input"

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-    import { ref, computed, unref, onMounted, nextTick, onUpdated } from 'vue';
+    import { ref, computed, unref, onMounted, nextTick } from 'vue';
     import BaseInput from './BaseInput.vue';
-    import { Message, MessageStatus } from '../types';
-    import { getAnswer, getMessages, sendMessages } from '../api';
+    import { Message, MessageStatus, Settings } from '../types';
+    import { getAnswer, getMessages, sendMessages, getSettings } from '../api';
     import MessageBlock from './MessageBlock.vue';
     import { delayWriting, delayReading, delayBeforeReading } from '../utils';
     import MessageLoader from './MessageLoader.vue';
+    import InteractionButtons from './InteractionButtons.vue';
     import ChatHeader from './ChatHeader.vue';
 
     const emit = defineEmits<{
@@ -15,9 +16,18 @@
     const messageModel = ref('');
     const messages = ref<Message[]>([]);
     const dialogStatus = ref<'reading' | 'writing' | ''>('');
+    const settings = ref<Settings | null>(null);
     const messageIdsStatus = ref<Record<string, MessageStatus>>({'': 'sent'}); 
     const chatBlockRef = ref<HTMLElement>();
 
+    const dialogDisabled = computed(() => {
+        const dialogSettings = unref(settings);
+        if(!dialogSettings) return false
+        const { answersLimit } = dialogSettings;
+        const assistantMessage = unref(messages).filter((message) => message.role === 'assistant');
+        return assistantMessage.length >= answersLimit;
+
+    });
     const buttonDisabled = computed(() => !unref(messageModel));
 
     const dialogStatusText = computed(() => {
@@ -75,10 +85,12 @@
             await srollToDown();
             await delayReading(clientMessage);
             dialogStatus.value = 'writing';
-            const assistantMessage = await getAnswer();
-            await delayWriting(assistantMessage);
-            messages.value.push(assistantMessage);
-            messageIdsStatus.value[assistantMessage.id] = 'read';
+            const assistantMessages = await getAnswer();
+            await delayWriting(assistantMessages);
+            messages.value.push(...assistantMessages);
+            assistantMessages.forEach((assistantMessage) => {
+                messageIdsStatus.value[assistantMessage.id] = 'read';
+            })
             await srollToDown();
         } catch (error) {
             console.log(error);
@@ -89,8 +101,9 @@
 
     onMounted(async () => {
         try {
-            const dialogMessages = await getMessages();
+            const [dialogMessages, dialogSettings] = await Promise.all([getMessages(), getSettings()]);
             messages.value = dialogMessages.reverse();
+            settings.value = dialogSettings;
             dialogMessages.forEach((message) => {
                 unref(messageIdsStatus)[message.id] = 'read';
             });
@@ -110,6 +123,7 @@
                 ref="headerRef"
                 class="chat__header"
                 :with-close-icon="true"
+                :headerText="'Администратор ALFA DENT'"
                 @close="emit('close')"
             ></ChatHeader>
         </div>
@@ -130,6 +144,9 @@
                         :message-status="messageIdsStatus[message.id]"
                     />
                 </div>
+                <InteractionButtons 
+                    v-if="dialogDisabled"
+                />
                 <MessageLoader
                     v-if="dialogStatusText"
                     :text="dialogStatusText"
@@ -140,6 +157,7 @@
             <BaseInput
                 v-model="messageModel"
                 :placeholder="'Введите сообщение'"
+                :input-disabled="dialogDisabled"
                 :button-disabled="buttonDisabled"
                 @send-message="onSendMessage"
             ></BaseInput>

@@ -7,6 +7,7 @@
     withDefaults(defineProps<{
         small?: boolean,
         withCloseIcon?: boolean,
+        headerText: string,
     }>(), {
         small: false,
         withClose: false,
@@ -28,8 +29,15 @@
             @click="emit('close')"
             class="header__close"
         ></div>
-        <div class="header__title"> Напишите ваше сообщение </div>
-        <div class="header__subtitle" v-if="!small"> Операторы онлайн </div>
+        <div class="header__wrapper">
+            <div class="header__photo" v-if="!small">
+
+            </div>
+            <div class="header__info"> 
+                <div class="header__title"> {{ headerText }} </div>
+                <div class="header__subtitle" v-if="!small"> +7 978 012 80 51 </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -41,7 +49,7 @@
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        padding: 0 16px;
+        padding: 12px 16px;
         flex-direction: column;
         gap: 4px;
         background: rgb(5,58,155);
@@ -50,6 +58,23 @@
         border-top-right-radius: 12px;
         border-top-left-radius: 12px;
         width: 100%;
+
+        &__photo {
+            height: 36px;
+            width: 36px;
+            background-color: black;
+            border-radius: 100%;
+        }
+        &__wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        &__info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
 
         &__close {
             cursor: pointer;

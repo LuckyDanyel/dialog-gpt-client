@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
   const styleId = `styles-dialog-${buildId}`;
 
   const env = loadEnv('./env', process.cwd(), '');
-  const domain = env.VITE_CHAT_GPT_DOMAIN_CLIENT;
+  const domain = env.VITE_DOMAIN_CLIENT;
 
   return {
     define: {
