@@ -4,7 +4,7 @@
     import ChatHeader from './components/ChatHeader.vue';
     import { MOBILE_SIZE } from './assets/variables.ts';
     const isOpen = ref(false);
-    const chatRef = ref<HTMLElement>();
+    const chatRef = ref<any>(null);
     const buildId = import.meta.env.BUILD_ID;
 
     const bodyClass = `body-styles-${buildId}`;
@@ -24,6 +24,7 @@
     const openChat = () => {
         isOpen.value = true;
         document.body.classList.add(bodyClass);
+        chatRef.value.scrollToDown();
     };
 
     const closeChat = () => {
@@ -36,15 +37,15 @@
 
 <template>
     <div class="app">
-            <div 
-                class="app__chat"
-                v-show="isOpen"
-            >
-                <Chat
-                    ref="chatRef"
-                    @close="closeChat()"
-                ></Chat>
-            </div>
+        <div 
+            class="app__chat"
+            v-show="isOpen"
+        >
+            <Chat
+                ref="chatRef"
+                @close="closeChat()"
+            ></Chat>
+        </div>
         <div 
             v-show="!isOpen"
             @click="openChat()"
@@ -61,6 +62,7 @@
 </template>
 
 <style lang="scss" scoped>
+
     .app {
         height: 5000px;
         &__chat {

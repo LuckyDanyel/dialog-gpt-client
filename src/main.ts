@@ -1,18 +1,19 @@
-import { createApp } from 'vue'
-import './assets/global.scss'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import './assets/fonts.scss';
+import './assets/global.scss';
 
 
-const buildId = import.meta.env.BUILD_ID;
-const styleId = import.meta.env.STYLE_ID;
+const ROOT_APP_ID = import.meta.env.ROOT_APP_ID;
+const stylesId = import.meta.env.HEAD_STYLES_ID;
 const isDev = import.meta.env.DEV;
 
 const getStyles = () => {
-    return document.querySelector(`#${styleId}`)?.cloneNode(true);
+    return document.querySelector(`#${stylesId}`)?.cloneNode(true);
 };
 
 const removeStyles = () => {
-    document.querySelector(`#${styleId}`)?.remove();
+    document.querySelector(`#${stylesId}`)?.remove();
 };
 
 const createWidget = (styles: Node | undefined) => {
@@ -28,7 +29,7 @@ const createWidget = (styles: Node | undefined) => {
 
 const getRoot = () => {
     const root = document.createElement('div');
-    root.setAttribute('id', `app-${buildId}`);
+    root.setAttribute('id', `${ROOT_APP_ID}`);
 
     return isDev ? root : root.attachShadow({ mode: 'closed' });
 };

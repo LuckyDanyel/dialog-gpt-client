@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+    import adminPhoto from '../assets/images/admin-photo.png'
 
     const emit = defineEmits<{
         (e: 'close'): void,
@@ -30,8 +31,15 @@
             class="header__close"
         ></div>
         <div class="header__wrapper">
-            <div class="header__photo" v-if="!small">
+            <div
+                class="header__photo" 
+                v-if="!small"
+            >
+                <img 
+                    :src="adminPhoto"
+                >
 
+                </img>
             </div>
             <div class="header__info"> 
                 <div class="header__title"> {{ headerText }} </div>
@@ -62,7 +70,6 @@
         &__photo {
             height: 36px;
             width: 36px;
-            background-color: black;
             border-radius: 100%;
         }
         &__wrapper {

@@ -1,12 +1,9 @@
-@import './variables.scss';
-
-* {
-    text-decoration: none;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-@font-face {
-    font-family: $fontRegular;
-    src: url(./fonts/OpenSans-Regular.woff2);
+##{$ROOT_APP_ID} {
+    * {
+        box-sizing: border-box;
+    }
+    p {
+        padding: 0;
+        margin: 0;
+    }
 }

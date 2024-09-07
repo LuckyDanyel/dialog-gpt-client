@@ -11,7 +11,7 @@
 
     const emit = defineEmits<{
         (e: 'close'): void,
-    }>()
+    }>();
 
     const messageModel = ref('');
     const messages = ref<Message[]>([]);
@@ -54,7 +54,7 @@
         }
     };
 
-    const srollToDown = async () => {
+    const scrollToDown = async () => { 
         const isScrollDown = Math.floor(chatBlockRef.value!.scrollTop + chatBlockRef.value!.clientHeight) === chatBlockRef.value?.scrollHeight;
         if(isScrollDown) {
             await nextTick();
@@ -73,25 +73,24 @@
             messages.value.push(clientMessage);
             const messageIndex = messages.value.length - 1;
             messageModel.value = '';
-            await srollToDown();
+            await scrollToDown();
             const { message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
             clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeClientMessage(clientMessage, messageIndex);
-            await srollToDown();
+            await scrollToDown();
             await delayBeforeReading();
             messageIdsStatus.value[clientMessage.id] = 'read';
-            dialogStatus.value = 'reading';
-            await srollToDown();
             await delayReading(clientMessage);
             dialogStatus.value = 'writing';
+            await scrollToDown();
             const assistantMessages = await getAnswer();
             await delayWriting(assistantMessages);
             messages.value.push(...assistantMessages);
             assistantMessages.forEach((assistantMessage) => {
                 messageIdsStatus.value[assistantMessage.id] = 'read';
             })
-            await srollToDown();
+            await scrollToDown();
         } catch (error) {
             console.log(error);
         } finally {
@@ -111,6 +110,10 @@
             
         }
     });
+
+    defineExpose({
+        scrollToDown,
+    })
 
 </script>
 
