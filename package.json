@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3005 --strictPort true",
-    "build": "vite build && vite serve --port 3005 --strictPort true",
-    "preview": "vite preview"
+    "build": "vite build && npm run preview",
+    "preview": "vite preview --port 3005 --strictPort true"
   },
   "dependencies": {
     "@types/js-cookie": "^3.0.6",

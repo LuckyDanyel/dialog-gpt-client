@@ -1,4 +1,6 @@
-@font-face {
-    font-family: $fontRegular;
-    src: url('./fonts/OpenSans-Regular.woff2');
+##{$ROOT_APP_ID} {
+    @font-face {
+        font-family: $fontRegular;
+        src: url('./fonts/OpenSans-Regular.woff2');
+    }
 }
