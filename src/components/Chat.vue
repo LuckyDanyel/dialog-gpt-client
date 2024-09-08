@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-    import { ref, computed, unref, onMounted, nextTick } from 'vue';
+    import { ref, computed, unref, onMounted, nextTick, watch } from 'vue';
     import BaseInput from './BaseInput.vue';
     import { Message, MessageStatus, Settings } from '../types';
     import { getAnswer, getMessages, sendMessages, getSettings } from '../api';
@@ -55,7 +55,8 @@
     };
 
     const scrollToDown = async () => { 
-        const isScrollDown = Math.floor(chatBlockRef.value!.scrollTop + chatBlockRef.value!.clientHeight) === chatBlockRef.value?.scrollHeight;
+        const currentScroll = Math.ceil(chatBlockRef.value!.scrollTop + chatBlockRef.value!.clientHeight);
+        const isScrollDown = currentScroll >= chatBlockRef.value!.scrollHeight;
         if(isScrollDown) {
             await nextTick();
             chatBlockRef.value?.scrollTo(0, chatBlockRef.value.scrollHeight);
@@ -73,24 +74,24 @@
             messages.value.push(clientMessage);
             const messageIndex = messages.value.length - 1;
             messageModel.value = '';
-            await scrollToDown();
+            scrollToDown();
             const { message }= await sendMessages([{ text: unref(clientMessage.content[0].text.value) }]);
             clientMessage = message;
             messageIdsStatus.value[clientMessage.id] = 'delivered';
             changeClientMessage(clientMessage, messageIndex);
-            await scrollToDown();
             await delayBeforeReading();
             messageIdsStatus.value[clientMessage.id] = 'read';
             await delayReading(clientMessage);
             dialogStatus.value = 'writing';
-            await scrollToDown();
+            scrollToDown()
             const assistantMessages = await getAnswer();
             await delayWriting(assistantMessages);
             messages.value.push(...assistantMessages);
             assistantMessages.forEach((assistantMessage) => {
                 messageIdsStatus.value[assistantMessage.id] = 'read';
-            })
-            await scrollToDown();
+            });
+            dialogStatus.value = '';
+            scrollToDown();
         } catch (error) {
             console.log(error);
         } finally {

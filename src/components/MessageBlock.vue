@@ -12,10 +12,16 @@
         return text.replace(/\*\*(.*?)\*\*/g, "$1");
     };
 
+    const deleteAnotations = (text: string): string => {
+        return text.replace(/【\d+:\d+†[^】]+】/g, '');
+
+        
+    }
+ 
     const modifyText = (text: string): string => {
         let result = '';
         result = changeStarsToBold(text);
-
+        result = deleteAnotations(result);
         return result;
     }
 
