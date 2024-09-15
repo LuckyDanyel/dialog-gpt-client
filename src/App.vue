@@ -62,9 +62,9 @@
 </template>
 
 <style lang="scss" scoped>
-
     .app {
-        height: 5000px;
+        z-index: 9999; 
+        position: relative;
         &__chat {
             max-width: 340px;
             width: 100%;
@@ -85,7 +85,6 @@
             bottom: 0;
             right: 50px;
         }
-
 
         @media (max-width: $MOBILE_SIZE) {
             &__chat-header {
