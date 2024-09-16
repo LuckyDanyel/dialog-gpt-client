@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
     import Chat from './components/Chat.vue';
     import ChatIcon from './components/ChatIcon.vue';
     import { MOBILE_SIZE } from './assets/variables.ts';
@@ -57,7 +57,7 @@
 
 <style lang="scss" scoped>
     .app {
-        z-index: 9999; 
+        z-index: 999999; 
         position: relative;
         &__chat {
             max-width: 340px;

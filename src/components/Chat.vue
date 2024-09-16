@@ -16,6 +16,7 @@
 
     const messageModel = ref('');
     const messages = ref<Message[]>([]);
+    const isChatLoaded = ref(false);
     const dialogStatus = ref<'reading' | 'writing' | ''>('');
     const settings = ref<Settings | null>(null);
     const messageIdsStatus = ref<Record<string, MessageStatus>>({'': 'sent'}); 
@@ -32,7 +33,6 @@
     const buttonDisabled = computed(() => !unref(messageModel));
 
     const dialogStatusText = computed(() => {
-        if(unref(dialogStatus) === 'reading') return 'Оператор читает сообщения';
         if(unref(dialogStatus) === 'writing') return 'Оператор набирает сообщение';
 
         return '';
@@ -110,6 +110,8 @@
             });
         } catch (error) {
             
+        } finally {
+            isChatLoaded.value = true;
         }
     });
 
@@ -155,7 +157,7 @@
                     />
                 </div>
                 <StartingButtons
-                    v-if="!messages.length"
+                    v-if="!messages.length && isChatLoaded"
                     @start-dialog="startDialog"
                 />
                 <InteractionButtons 
