@@ -12,10 +12,6 @@ const getStyles = () => {
     return document.querySelector(`#${stylesId}`)?.cloneNode(true);
 };
 
-const removeStyles = () => {
-    document.querySelector(`#${stylesId}`)?.remove();
-};
-
 const createWidget = (styles: Node | undefined) => {
     const app = document.createElement('div');
     const root = getRoot();
@@ -42,7 +38,6 @@ const getRoot = () => {
 try {
     const styles = getStyles();
     createWidget(styles);
-    removeStyles();
 } catch (error) {
     console.log(error);
 }
