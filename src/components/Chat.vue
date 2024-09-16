@@ -7,6 +7,7 @@
     import { delayWriting, delayReading, delayBeforeReading } from '../utils';
     import MessageLoader from './MessageLoader.vue';
     import InteractionButtons from './InteractionButtons.vue';
+    import StartingButtons from './StartingButtons.vue';
     import ChatHeader from './ChatHeader.vue';
 
     const emit = defineEmits<{
@@ -112,6 +113,11 @@
         }
     });
 
+    const startDialog = (text: string) => {
+        messageModel.value = text;
+        onSendMessage();
+    };
+
     defineExpose({
         scrollToDown,
     })
@@ -148,6 +154,10 @@
                         :message-status="messageIdsStatus[message.id]"
                     />
                 </div>
+                <StartingButtons
+                    v-if="!messages.length"
+                    @start-dialog="startDialog"
+                />
                 <InteractionButtons 
                     v-if="dialogDisabled"
                 />

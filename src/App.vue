@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import Chat from './components/Chat.vue';
-    import ChatHeader from './components/ChatHeader.vue';
+    import ChatIcon from './components/ChatIcon.vue';
     import { MOBILE_SIZE } from './assets/variables.ts';
     const isOpen = ref(false);
     const chatRef = ref<any>(null);
@@ -46,17 +46,11 @@
                 @close="closeChat()"
             ></Chat>
         </div>
-        <div 
+        <ChatIcon
             v-show="!isOpen"
             @click="openChat()"
             class="app__chat-trigger"
-        >
-            <ChatHeader 
-                class="app__chat-header"
-                :small="true"
-                :headerText="'Администраторы онлайн'"
-            ></ChatHeader>
-        </div>
+        ></ChatIcon>
 
     </div>
 </template>
@@ -76,27 +70,16 @@
             bottom: 0;
             right: 50px;
         }
-        &__chat-trigger {
-            cursor: pointer;
-            max-width: 250px;
-            width: 100%;
 
+        &__chat-trigger {
             position: fixed;
-            bottom: 0;
-            right: 50px;
+            right: 30px;
+            bottom: 10px;
         }
 
         @media (max-width: $MOBILE_SIZE) {
             &__chat-header {
                 display: none;
-            }
-            &__chat-trigger {
-                width: 65px;
-                height: 65px;
-                background-image: url('./icons/chat-icon.svg');
-                background-repeat: no-repeat;
-                right: 10px;
-                bottom: 10px;
             }
             &__chat {
                 right: 0;
