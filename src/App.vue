@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { onMounted, ref } from 'vue';
+    import { ref } from 'vue';
     import Chat from './components/Chat.vue';
     import ChatIcon from './components/ChatIcon.vue';
     import { MOBILE_SIZE } from './assets/variables.ts';
@@ -37,6 +37,7 @@
 
 <template>
     <div class="app">
+        <span class="app__hidden-font-loader">Загрузка шрифта</span>
         <div 
             class="app__chat"
             v-show="isOpen"
@@ -59,6 +60,7 @@
     .app {
         z-index: 999999; 
         position: relative;
+        font-family: $fontRegular;
         &__chat {
             max-width: 340px;
             width: 100%;
@@ -69,6 +71,10 @@
             position: fixed;
             bottom: 0;
             right: 50px;
+        }
+        &__hidden-font-loader {
+            font-family: $fontRegular;
+            visibility: hidden;
         }
 
         &__chat-trigger {

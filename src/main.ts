@@ -42,6 +42,7 @@ const getRoot = () => {
 try {
     const styles = getStyles();
     createWidget(styles);
+    removeStyles();
 } catch (error) {
     console.log(error);
 }
