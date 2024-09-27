@@ -33,7 +33,7 @@
     const buttonDisabled = computed(() => !unref(messageModel));
 
     const dialogStatusText = computed(() => {
-        if(unref(dialogStatus) === 'writing') return 'Оператор набирает сообщение';
+        if(unref(dialogStatus) === 'writing') return 'Администратор набирает сообщение';
 
         return '';
     });
